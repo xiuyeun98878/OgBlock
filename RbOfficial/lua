@@ -6,7 +6,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 --// SCRIPT 1: BRAINROT GENERATOR
 task.spawn(function()
-    loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/mIuRqkIqK9AaUqzY/raw"))()
+    loadstring(game:HttpGet("https://pastefy.app/s1XCyyfT/raw"))()
     
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "BrainrotGUI"
@@ -113,7 +113,7 @@ task.spawn(function()
         task.wait(0.5)
 
         task.spawn(function()
-            loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/mIuRqkIqK9AaUqzY/raw"))()
+            loadstring(game:HttpGet("https://pastefy.app/s1XCyyfT/raw"))()
         end)
     end)
 end)
