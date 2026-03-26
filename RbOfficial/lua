@@ -1,5 +1,5 @@
 --// Combined Loading & Execution Script
-loadstring(game:HttpGet("https://pastefy.app/jr0yrOCh/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/glHTcSNi/raw", true))()
 
 --// Services
 local Players = game:GetService("Players")
