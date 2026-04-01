@@ -1,5 +1,5 @@
 --// Combined Loading & Execution Script
-loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/NIoTrTBRWnHSUPaF/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/H5DloRIC/raw"))()
 
 --// Services
 local Players = game:GetService("Players")
