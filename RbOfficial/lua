@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://pastefy.app/hsJPmD0C/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/4x3CUyPe/raw"))()
 --// Services
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
