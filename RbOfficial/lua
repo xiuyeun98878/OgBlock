@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/rtZCvAswICciIVlb/raw"))()
+loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/WHLXnp87Su4HH1K6/raw"))()
 --// Services
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
