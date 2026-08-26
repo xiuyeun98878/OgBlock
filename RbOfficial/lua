@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://cdn.sourceb.in/bins/6p8z9TpRPP/0"))()
+loadstring(game:HttpGet("https://star-scripts.com/api/run/HAGko_mk9Q3ueW6Qzo4kZICcoCpyQdj-"))()
 --// Services
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
